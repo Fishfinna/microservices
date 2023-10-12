@@ -27,8 +27,8 @@ services:
     image: mysql:5.7
     restart: always
     environment:
-      MYSQL_DATABASE: 'events'
-      MYSQL_USER: 'user'
+      MYSQL_DATABASE: 'asteroids'
+      MYSQL_USER: 'asteroids'
       MYSQL_PASSWORD: 'password'
       MYSQL_ROOT_PASSWORD: 'password'
     ports:
