@@ -22,6 +22,8 @@ services:
     image: audit_log
     depends_on:
       - "kafka"
+    ports:
+      - "8110:8110"
   zookeeper:
     image: wurstmeister/zookeeper
     ports:
