@@ -1,0 +1,129 @@
+---
+openapi: 3.0.0
+info:
+  title: Asteroid Tracker
+  description: An API that receives asteroid tracking information
+  contact:
+    email: shanti.steingagnon@gmail.com
+  version: 1.0.0
+servers:
+  - url: /
+tags:
+  - name: sensors
+    description: Operations available to tracking sensors
+paths:
+  /direction:
+    post:
+      tags:
+        - sensors
+      summary: reports the direction of near earth asteroid
+      description: Adds a record for the direction and speed of an asteroid
+      operationId: app.report_asteroid_direction
+      requestBody:
+        description: Record to add
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AsteroidDirectionReading"
+      responses:
+        "201":
+          description: record created
+        "400":
+          description: invalid input could not create record
+
+  /scale:
+    post:
+      tags:
+        - sensors
+      summary: reports the scale of a near earth asteroid
+      description: Adds a record for the scale of an asteroid
+      operationId: app.report_asteroid_scale
+      requestBody:
+        description: Record to add
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AsteroidScaleReading"
+      responses:
+        "201":
+          description: record created
+        "400":
+          description: invalid input could not create record
+
+components:
+  schemas:
+    AsteroidDirectionReading:
+      required:
+        - asteroid_id
+        - collision_risk
+        - direction
+        - km_per_hour
+        - moving_towards_earth
+        - record_id
+        - timestamp
+      properties:
+        record_id:
+          type: string
+          format: uuid
+        asteroid_id:
+          type: string
+          format: uuid
+        timestamp:
+          type: string
+          format: date-time
+          example: 2023-02-21T09:12:08.001Z
+        km_per_hour:
+          type: number
+          format: float
+          example: 203.54
+        direction:
+          type: number
+          format: int
+          example: 160
+        moving_towards_earth:
+          type: boolean
+          format: boolean
+          example: true
+        collision_risk:
+          type: boolean
+          example: true
+    AsteroidScaleReading:
+      required:
+        - asteroid_id
+        - depth_cm
+        - estimated_kg_weight
+        - height_cm
+        - material
+        - record_id
+        - timestamp
+        - width_cm
+      properties:
+        record_id:
+          type: string
+          format: uuid
+        asteroid_id:
+          type: string
+          format: uuid
+        timestamp:
+          type: string
+          format: date-time
+          example: 2023-02-21T09:12:08.001Z
+        width_cm:
+          type: number
+          format: float
+          example: 1402.2
+        height_cm:
+          type: number
+          format: float
+          example: 1202.52
+        depth_cm:
+          type: number
+          format: float
+          example: 1900.43
+        material:
+          type: string
+          example: quartz
+        estimated_kg_weight:
+          type: number
+          format: float
+          example: 2090.9

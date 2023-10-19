@@ -1,0 +1,57 @@
+---
+openapi: 3.0.0
+info:
+  title: Asteroid API
+  description: Provides event stats for
+  version: "1.0.0"
+  contact:
+    email: shanti.steingagnon@gmail.com
+paths:
+  /stats:
+    get:
+      summary: Get the event stats
+      operationId: app.get_stats
+      description: returns the data for asteroids
+      responses:
+        "200":
+          description: OK - asteroid data returned
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: "#/components/schemas/ReadingStats"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+components:
+  schemas:
+    ReadingStats:
+      required:
+        - num_direction_readings
+        - max_direction_readings
+        - num_scale_readings
+        - max_scale_readings
+      properties:
+        num_direction_readings:
+          type: number
+          format: int
+          example: 160
+        max_direction_readings:
+          type: number
+          format: int
+          example: 102
+        num_scale_readings:
+          type: number
+          format: int
+          example: 160
+        max_scale_readings:
+          type: number
+          format: int
+          example: 1024

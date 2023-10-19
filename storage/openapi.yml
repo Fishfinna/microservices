@@ -1,0 +1,161 @@
+---
+openapi: 3.0.0
+info:
+  title: Asteroid Tracker
+  description: An API that receives asteroid tracking information
+  contact:
+    email: shanti.steingagnon@gmail.com
+  version: 1.0.0
+servers:
+  - url: /
+tags:
+  - name: sensors
+    description: Operations available to tracking sensors
+paths:
+  /direction:
+    get:
+      summary: return direction data
+      operationId: app.get_asteroid_direction
+      description: returns the direction data
+      parameters:
+        - in: query
+          name: timestamp
+          description: timestamp to limit the results range to
+          schema:
+            type: string
+            format: date-time
+            example: 2023-12-29T09:12:33.001Z
+      responses:
+        "200":
+          description: OK - direction records returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AsteroidDirectionReading"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /scale:
+    get:
+      summary: return scale data
+      operationId: app.get_asteroid_scale
+      description: get the scale data
+      parameters:
+        - in: query
+          name: timestamp
+          description: timestamp to limit the results range to
+          schema:
+            type: string
+            format: date-time
+            example: 2023-12-29T09:12:33.001Z
+      responses:
+        "200":
+          description: OK - scale records returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AsteroidScaleReading"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+components:
+  schemas:
+    AsteroidDirectionReading:
+      required:
+        - trace_id
+        - asteroid_id
+        - collision_risk
+        - direction
+        - km_per_hour
+        - moving_towards_earth
+        - record_id
+        - timestamp
+      properties:
+        trace_id:
+          type: string
+          format: uuid
+        record_id:
+          type: string
+          format: uuid
+        asteroid_id:
+          type: string
+          format: uuid
+        timestamp:
+          type: string
+          format: date-time
+          example: 2023-02-21T09:12:08.001Z
+        km_per_hour:
+          type: number
+          format: float
+          example: 203.54
+        direction:
+          type: number
+          format: int
+          example: 160
+        moving_towards_earth:
+          type: boolean
+          format: boolean
+          example: true
+        collision_risk:
+          type: boolean
+          example: true
+    AsteroidScaleReading:
+      required:
+        - trace_id
+        - asteroid_id
+        - depth_cm
+        - estimated_kg_weight
+        - height_cm
+        - material
+        - record_id
+        - timestamp
+        - width_cm
+      properties:
+        trace_id:
+          type: string
+          format: uuid
+        record_id:
+          type: string
+          format: uuid
+        asteroid_id:
+          type: string
+          format: uuid
+        timestamp:
+          type: string
+          format: date-time
+          example: 2023-02-21T09:12:08.001Z
+        width_cm:
+          type: number
+          format: float
+          example: 1402.2
+        height_cm:
+          type: number
+          format: float
+          example: 1202.52
+        depth_cm:
+          type: number
+          format: float
+          example: 1900.43
+        material:
+          type: string
+          example: quartz
+        estimated_kg_weight:
+          type: number
+          format: float
+          example: 2090.9

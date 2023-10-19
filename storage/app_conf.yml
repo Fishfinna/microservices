@@ -1,0 +1,11 @@
+version: 1
+datastore:
+  user: asteroids
+  password: password
+  hostname: kafka-lab6.canadacentral.cloudapp.azure.com
+  port: 3306
+  db: asteroids
+events:
+  hostname: kafka-lab6.canadacentral.cloudapp.azure.com
+  port: 9092
+  topic: events
