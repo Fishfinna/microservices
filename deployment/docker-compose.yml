@@ -17,8 +17,7 @@ services:
     image: processing
     ports:
       - "8100:8100"
-    networks:
-      - host
+    network_mode: host
   audit_log:
     image: audit_log
     depends_on:
@@ -50,10 +49,10 @@ services:
     image: mysql:5.7
     restart: always
     environment:
-      MYSQL_DATABASE: 'asteroids'
-      MYSQL_USER: 'asteroids'
-      MYSQL_PASSWORD: 'password'
-      MYSQL_ROOT_PASSWORD: 'password'
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
       - '3306:3306'
     expose:
