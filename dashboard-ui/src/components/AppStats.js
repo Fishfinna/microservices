@@ -25,7 +25,7 @@ export default function AppStats() {
     }, [getStats]);
 
     if (error) {
-        return (<div className={"error"}>Error found when fetching from API</div>)
+        return (<div className={"error"}>Error found when fetching from API {JSON.stringify(error)}</div>)
     } else if (isLoaded === false) {
         return (<div>Loading...</div>)
     } else if (isLoaded === true) {

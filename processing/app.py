@@ -30,9 +30,6 @@ def get_stats():
         with open(data_file, "r") as f:
             json_data = json.load(f)
 
-        # remove the extra data
-        json_data.pop("last_updated")
-
         logger.debug(f"Statistics message content: {json_data}")
         logger.info("Get stats request complete.")
 
