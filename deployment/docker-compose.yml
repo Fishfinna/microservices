@@ -1,5 +1,12 @@
 version: '3.3'
 services:
+  dashboard:
+    image: dashboard
+    ports:
+      - "3000:3000"
+    depends_on:
+      - "processing"
+      - "audit_log"
   reveiver:
     image: receiver
     ports:
