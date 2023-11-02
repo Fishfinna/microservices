@@ -132,7 +132,7 @@ def init_scheduler():
 app = connexion.FlaskApp(__name__, specification_dir="")
 app.add_api("openapi.yml", strict_validation=True, validate_responses=True)
 CORS(app.app)
-app.app.config['CORS_HEADERS'] = 'Content-Type
+app.app.config["CORS_HEADERS"] = "Content-Type"
 
 
 if __name__ == "__main__":
