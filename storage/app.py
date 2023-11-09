@@ -1,5 +1,5 @@
 import connexion
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, and_
 from sqlalchemy.orm import sessionmaker
 from connexion import NoContent
 from base import Base
@@ -13,6 +13,7 @@ import yaml
 import json
 import logging
 import logging.config
+import time
 
 with open("app_conf.yml", "r") as f:
     app_config = yaml.safe_load(f.read())
@@ -32,12 +33,26 @@ if DB_SESSION:
     logger.info(f"connected to DB. Hostname:{data['hostname']} Port:{data['port']}")
 
 
-def get_asteroid_scale(timestamp):
+def get_asteroid_scale(start_timestamp, end_timestamp):
     """Gets the asteroid scale readings from after the timestamp"""
     session = DB_SESSION()
-    timestamp_datetime = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
+    start_timestamp_datetime = datetime.strptime(
+        start_timestamp, "%Y-%m-%dT%H:%M:%S.%fZ"
+    )
 
-    readings = session.query(Scale).filter(Scale.date_created >= timestamp_datetime)
+    end_timestamp_datetime = datetime.datetime.strptime(
+        end_timestamp, "%Y-%m-%dT%H:%M:%S"
+    )
+    readings = (
+        session.query(Scale)
+        .filter(Scale.date_created >= start_timestamp_datetime)
+        .filter(
+            and_(
+                Scale.date_created >= start_timestamp_datetime,
+                Scale.date_created < end_timestamp_datetime,
+            )
+        )
+    )
 
     results_list = []
     for reading in readings:
@@ -46,19 +61,31 @@ def get_asteroid_scale(timestamp):
     session.close()
 
     logger.info(
-        f"Query for Asteroid Scale reading after {timestamp} returns {len(results_list)}"
+        f"Query for Asteroid Scale reading after {start_timestamp} returns {len(results_list)}"
     )
 
     return results_list, 200
 
 
-def get_asteroid_direction(timestamp):
+def get_asteroid_direction(start_timestamp, end_timestamp):
     """Gets the asteroid direction readings from after the timestamp"""
     session = DB_SESSION()
-    timestamp_datetime = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
+    start_timestamp_datetime = datetime.strptime(
+        start_timestamp, "%Y-%m-%dT%H:%M:%S.%fZ"
+    )
 
-    readings = session.query(Direction).filter(
-        Direction.date_created >= timestamp_datetime
+    end_timestamp_datetime = datetime.datetime.strptime(
+        end_timestamp, "%Y-%m-%dT%H:%M:%S"
+    )
+    readings = (
+        session.query(Direction)
+        .filter(Direction.date_created >= start_timestamp_datetime)
+        .filter(
+            and_(
+                Direction.date_created >= start_timestamp_datetime,
+                Direction.date_created < end_timestamp_datetime,
+            )
+        )
     )
 
     results_list = []
@@ -68,7 +95,7 @@ def get_asteroid_direction(timestamp):
     session.close()
 
     logger.info(
-        f"Query for Asteroid Direction reading after {timestamp} returns {len(results_list)}"
+        f"Query for Asteroid Direction reading after {start_timestamp} returns {len(results_list)}"
     )
 
     return results_list, 200
@@ -79,8 +106,21 @@ def process_messages():
         app_config["events"]["hostname"],
         app_config["events"]["port"],
     )
-    client = KafkaClient(hosts=hostname)
-    topic = client.topics[str.encode(app_config["events"]["topic"])]
+
+    max_retries = app_config["max_retries"]
+    current_retry_count = 0
+
+    while current_retry_count < max_retries:
+        logger.info(
+            f"Attempting connection to Kafka (attempt {current_retry_count} of {max_retries})"
+        )
+        try:
+            client = KafkaClient(hosts=hostname)
+            topic = client.topics[str.encode(app_config["events"]["topic"])]
+        except:
+            logger.error(f"attempt {current_retry_count} failed to connect to kafka")
+            time.sleep(app_config["sleep_time"])
+            current_retry_count += 1
 
     consumer = topic.get_simple_consumer(
         consumer_group=b"event_group",

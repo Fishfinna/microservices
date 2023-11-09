@@ -1,6 +1,9 @@
 version: '3.3'
 services:
   dashboard:
+    build:
+      context: ./dashboard-ui
+      dockerfile: Dockerfile
     image: dashboard
     ports:
       - "3000:3000"
@@ -8,12 +11,18 @@ services:
       - "processing"
       - "audit_log"
   reveiver:
+    build:
+      context: ./reveiver
+      dockerfile: Dockerfile
     image: receiver
     ports:
       - "8080:8080"
     depends_on:
       - "kafka"
   storage:
+    build:
+      context: ./storage
+      dockerfile: Dockerfile
     image: storage
     ports:
       - "8090:8090"
@@ -21,6 +30,9 @@ services:
       - "kafka"
       - "db"
   processing:
+    build:
+      context: ./processing
+      dockerfile: Dockerfile
     image: processing
     ports:
       - "8100:8100"
@@ -36,6 +48,8 @@ services:
     ports:
       - "2181"
     hostname: zookeeper
+    volumes:
+      - /home/azureuser/zookeeper/data:/opt/zookeeper-3.4.13/data
   kafka:
     image: wurstmeister/kafka
     command: [start-kafka.sh]
@@ -50,8 +64,11 @@ services:
       KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:29092,OUTSIDE://kafka-lab6.canadacentral.cloudapp.azure.com:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LOG_DIRS: /kafka/kafka-logs
+      KAFKA_BROKER_ID: 1
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      -  /home/azureuser/kafka:/kafka/kafka-logs
     depends_on:
       - "zookeeper"
   db:

@@ -19,12 +19,19 @@ paths:
       description: returns the direction data
       parameters:
         - in: query
-          name: timestamp
-          description: timestamp to limit the results range to
+          name: start_timestamp
+          description: start timestamp to limit the results range
           schema:
             type: string
             format: date-time
             example: 2023-12-29T09:12:33.001Z
+        - in: query
+          name: end_timestamp
+          description: end timestamp to limit the results range
+          schema:
+            type: string
+            format: date-time
+            example: 2023-13-29T09:12:33.001Z
       responses:
         "200":
           description: OK - direction records returned
@@ -50,12 +57,19 @@ paths:
       description: get the scale data
       parameters:
         - in: query
-          name: timestamp
-          description: timestamp to limit the results range to
+          name: start_timestamp
+          description: start timestamp to limit the results range
           schema:
             type: string
             format: date-time
             example: 2023-12-29T09:12:33.001Z
+        - in: query
+          name: end_timestamp
+          description: end timestamp to limit the results range
+          schema:
+            type: string
+            format: date-time
+            example: 2023-13-29T09:12:33.001Z
       responses:
         "200":
           description: OK - scale records returned
