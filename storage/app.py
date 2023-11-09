@@ -124,6 +124,8 @@ def process_messages():
             logger.error(f"attempt {current_retry_count} failed to connect to kafka")
             time.sleep(app_config["sleep_time"])
             current_retry_count += 1
+        if current_retry_count == max_retries:
+            logger.error("Failed to connect to kafka")
 
     consumer = topic.get_simple_consumer(
         consumer_group=b"event_group",
