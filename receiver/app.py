@@ -22,6 +22,8 @@ with open("log_conf.yml", "r") as f:
     logging.config.dictConfig(log_config)
     logger = logging.getLogger("basicLogger")
 
+producer = None
+
 
 def kafka_connect():
     max_retries = int(app_config["max_retries"])
@@ -34,6 +36,9 @@ def kafka_connect():
             client = KafkaClient(
                 hosts=f'{events_config.get("hostname")}:{events_config.get("port")}'
             )
+            topic = client.topics[str.encode(events_config["topic"])]
+            global producer
+            producer = topic.get_sync_producer()
             logger.info(f"Successfully connected to kafka")
             break
         except Exception as e:
@@ -69,8 +74,6 @@ def report_asteroid_scale(body):
     trace_id = str(uuid.uuid4())
     body["trace_id"] = trace_id
     logger.info(f"Received {event_name} request with a trace id of {trace_id}) ")
-    topic = client.topics[str.encode(events_config["topic"])]
-    producer = topic.get_sync_producer()
     msg = {
         "type": "sc",
         "datetime": datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
