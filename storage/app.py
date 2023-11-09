@@ -118,8 +118,7 @@ def process_messages():
             )
             client = KafkaClient(hosts=hostname)
             topic = client.topics[str.encode(app_config["events"]["topic"])]
-            logger.info(f"sleep time {app_config['sleep_time']}")
-            logger.info(f"Success")
+            logger.info(f"Successfully connected to kafka")
         except Exception as e:
             logger.error(f"attempt {current_retry_count} failed to connect to kafka")
             time.sleep(app_config["sleep_time"])
