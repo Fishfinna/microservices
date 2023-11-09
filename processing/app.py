@@ -58,13 +58,13 @@ def populate_stats():
     last_update_time = json_data["last_updated"]
 
     direction_response = requests.get(
-        f"{ENDPOINT}/direction?timestamp={last_update_time}&end_timestamp={current_time}"
+        f"{ENDPOINT}/direction?start_timestamp={last_update_time}&end_timestamp={current_time}"
     )
     direction_data = direction_response.json()
     direction_count = len(direction_data)
 
     scale_response = requests.get(
-        f"{ENDPOINT}/scale?timestamp={last_update_time}&end_timestamp={current_time}"
+        f"{ENDPOINT}/scale?start_timestamp={last_update_time}&end_timestamp={current_time}"
     )
     scale_data = scale_response.json()
     scale_count = len(scale_data)
