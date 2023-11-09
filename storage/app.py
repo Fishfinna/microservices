@@ -41,9 +41,7 @@ def get_asteroid_scale(start_timestamp, end_timestamp):
         start_timestamp, "%Y-%m-%dT%H:%M:%S.%fZ"
     )
 
-    end_timestamp_datetime = datetime.datetime.strptime(
-        end_timestamp, "%Y-%m-%dT%H:%M:%S"
-    )
+    end_timestamp_datetime = datetime.strptime(end_timestamp, "%Y-%m-%dT%H:%M:%S")
     readings = (
         session.query(Scale)
         .filter(Scale.date_created >= start_timestamp_datetime)
@@ -75,9 +73,7 @@ def get_asteroid_direction(start_timestamp, end_timestamp):
         start_timestamp, "%Y-%m-%dT%H:%M:%S.%fZ"
     )
 
-    end_timestamp_datetime = datetime.datetime.strptime(
-        end_timestamp, "%Y-%m-%dT%H:%M:%S"
-    )
+    end_timestamp_datetime = datetime.strptime(end_timestamp, "%Y-%m-%dT%H:%M:%S")
     readings = (
         session.query(Direction)
         .filter(Direction.date_created >= start_timestamp_datetime)
