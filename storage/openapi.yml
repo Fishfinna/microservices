@@ -31,7 +31,7 @@ paths:
           schema:
             type: string
             format: date-time
-            example: 2023-13-29T09:12:33.001Z
+            example: 2023-12-29T09:12:33.001Z
       responses:
         "200":
           description: OK - direction records returned
