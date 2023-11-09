@@ -38,6 +38,9 @@ services:
       - "8100:8100"
     network_mode: host
   audit_log:
+    build:
+      context: ./audit_log
+      dockerfile: Dockerfile
     image: audit_log
     depends_on:
       - "kafka"
