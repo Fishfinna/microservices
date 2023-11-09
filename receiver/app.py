@@ -54,8 +54,6 @@ def report_asteroid_direction(body):
     trace_id = str(uuid.uuid4())
     body["trace_id"] = trace_id
     logger.info(f"Received {event_name} request with a trace id of {trace_id}) ")
-    topic = client.topics[str.encode(events_config["topic"])]
-    producer = topic.get_sync_producer()
     msg = {
         "type": "di",
         "datetime": datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
