@@ -2,7 +2,7 @@ version: '3.3'
 services:
   dashboard:
     build:
-      context: ./dashboard-ui
+      context: ../dashboard-ui
       dockerfile: Dockerfile
     image: dashboard
     ports:
@@ -12,7 +12,7 @@ services:
       - "audit_log"
   reveiver:
     build:
-      context: ./reveiver
+      context: ../reveiver
       dockerfile: Dockerfile
     image: receiver
     ports:
@@ -21,7 +21,7 @@ services:
       - "kafka"
   storage:
     build:
-      context: ./storage
+      context: ../storage
       dockerfile: Dockerfile
     image: storage
     ports:
@@ -31,7 +31,7 @@ services:
       - "db"
   processing:
     build:
-      context: ./processing
+      context: ../processing
       dockerfile: Dockerfile
     image: processing
     ports:
@@ -39,7 +39,7 @@ services:
     network_mode: host
   audit_log:
     build:
-      context: ./audit_log
+      context: ../audit_log
       dockerfile: Dockerfile
     image: audit_log
     depends_on:
