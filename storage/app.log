@@ -1,5 +1,0 @@
-2023-11-09 10:36:52,417 - basicLogger - INFO - connected to DB. Hostname:kafka-lab6.canadacentral.cloudapp.azure.com Port:3306
-2023-11-09 10:36:52,498 - basicLogger - INFO - connected to DB. Hostname:kafka-lab6.canadacentral.cloudapp.azure.com Port:3306
-2023-11-09 10:36:52,565 - basicLogger - INFO - Attempting connection to Kafka (attempt 0 of 10)
-2023-11-09 10:37:16,682 - basicLogger - ERROR - attempt 0 failed to connect to kafka
-2023-11-09 10:37:18,687 - basicLogger - INFO - Attempting connection to Kafka (attempt 1 of 10)
