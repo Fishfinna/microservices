@@ -14,6 +14,7 @@ import json
 import logging
 import logging.config
 import time
+from pykafka.exceptions import SocketDisconnectedError, LeaderNotAvailable
 
 with open("app_conf.yml", "r") as f:
     app_config = yaml.safe_load(f.read())
@@ -107,17 +108,19 @@ def process_messages():
         app_config["events"]["port"],
     )
 
-    max_retries = app_config["max_retries"]
+    max_retries = int(app_config["max_retries"])
     current_retry_count = 0
 
     while current_retry_count < max_retries:
-        logger.info(
-            f"Attempting connection to Kafka (attempt {current_retry_count} of {max_retries})"
-        )
         try:
+            logger.info(
+                f"Attempting connection to Kafka (attempt {current_retry_count} of {max_retries})"
+            )
             client = KafkaClient(hosts=hostname)
             topic = client.topics[str.encode(app_config["events"]["topic"])]
-        except:
+            logger.info(f"sleep time {app_config['sleep_time']}")
+            logger.info(f"Success")
+        except Exception as e:
             logger.error(f"attempt {current_retry_count} failed to connect to kafka")
             time.sleep(app_config["sleep_time"])
             current_retry_count += 1

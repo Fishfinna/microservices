@@ -10,3 +10,4 @@ events:
   port: 9092
   topic: events
 max_retries: 10
+sleep_time: 2
