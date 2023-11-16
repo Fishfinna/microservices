@@ -10,9 +10,9 @@ services:
     depends_on:
       - "processing"
       - "audit_log"
-  reveiver:
+  receiver:
     build:
-      context: ../reveiver
+      context: ../receiver
       dockerfile: Dockerfile
     image: receiver
     ports:
