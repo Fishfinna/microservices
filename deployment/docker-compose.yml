@@ -65,6 +65,7 @@ services:
       - TARGET_ENV=test
     volumes:
       - /home/azureuser/config/audit_log:/config
+      - /home/azureuser/logs:/logs
   zookeeper:
     image: wurstmeister/zookeeper
     ports:
