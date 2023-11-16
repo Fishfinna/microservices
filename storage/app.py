@@ -35,6 +35,10 @@ with open(log_conf_file, "r") as f:
     logging.config.dictConfig(log_config)
     logger = logging.getLogger("basicLogger")
 
+
+logger.info("App Conf File: %s" % app_conf_file)
+logger.info("Log Conf File: %s" % log_conf_file)
+
 DB_ENGINE = create_engine(
     f'mysql+pymysql://{data["user"]}:{data["password"]}@{data["hostname"]}:{data["port"]}/{data["db"]}'
 )
