@@ -35,7 +35,6 @@ with open(log_conf_file, "r") as f:
 logger.info("App Conf File: %s" % app_conf_file)
 logger.info("Log Conf File: %s" % log_conf_file)
 
-
 max_retries = int(app_config["max_retries"])
 current_retry_count = 0
 while current_retry_count < max_retries:
