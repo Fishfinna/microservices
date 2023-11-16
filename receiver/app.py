@@ -8,6 +8,7 @@ import logging
 import logging.config
 import uuid
 import time
+import os
 
 MAX_EVENTS = 10
 EVENT_FILE = "events.json"

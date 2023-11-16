@@ -15,7 +15,7 @@ import logging
 import logging.config
 import time
 from pykafka.exceptions import SocketDisconnectedError, LeaderNotAvailable
-
+import os
 
 if "TARGET_ENV" in os.environ and os.environ["TARGET_ENV"] == "test":
     print("In Test Environment")
