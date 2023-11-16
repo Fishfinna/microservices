@@ -23,6 +23,7 @@ services:
       - TARGET_ENV=test
     volumes:
       - /home/azureuser/config/receiver:/config
+      - /home/azureuser/logs:/logs
   storage:
     build:
       context: ../storage
@@ -37,6 +38,7 @@ services:
       - TARGET_ENV=test
     volumes:
       - /home/azureuser/config/storage:/config
+      - /home/azureuser/logs:/logs
   processing:
     build:
       context: ../processing
@@ -49,6 +51,7 @@ services:
       - TARGET_ENV=test
     volumes:
       - /home/azureuser/config/processing:/config
+      - /home/azureuser/logs:/logs
   audit_log:
     build:
       context: ../audit_log
@@ -69,6 +72,7 @@ services:
     hostname: zookeeper
     volumes:
       - /home/azureuser/zookeeper/data:/opt/zookeeper-3.4.13/data
+      - /home/azureuser/logs:/logs
   kafka:
     image: wurstmeister/kafka
     command: [start-kafka.sh]
