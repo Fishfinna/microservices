@@ -60,6 +60,7 @@ def report_asteroid_direction(body):
         "payload": body,
     }
     msg_str = json.dumps(msg)
+    global producer
     producer.produce(msg_str.encode("utf-8"))
 
     logger.info(f"event {event_name} response (id: {trace_id}) with status {201}")
@@ -78,6 +79,7 @@ def report_asteroid_scale(body):
         "payload": body,
     }
     msg_str = json.dumps(msg)
+    global producer
     producer.produce(msg_str.encode("utf-8"))
 
     logger.info(f"event {event_name} response (id: {trace_id}) with status {201}")
