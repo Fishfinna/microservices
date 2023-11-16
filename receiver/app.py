@@ -22,31 +22,28 @@ with open("log_conf.yml", "r") as f:
     logging.config.dictConfig(log_config)
     logger = logging.getLogger("basicLogger")
 
-producer = None
 
-
-def kafka_connect():
-    max_retries = int(app_config["max_retries"])
-    current_retry_count = 0
-    while current_retry_count < max_retries:
-        try:
-            logger.info(
-                f"Attempting connection to Kafka (attempt {current_retry_count} of {max_retries})"
-            )
-            client = KafkaClient(
-                hosts=f'{events_config.get("hostname")}:{events_config.get("port")}'
-            )
-            topic = client.topics[str.encode(events_config["topic"])]
-            global producer
-            producer = topic.get_sync_producer()
-            logger.info(f"Successfully connected to kafka")
-            break
-        except Exception as e:
-            logger.error(f"attempt {current_retry_count} failed to connect to kafka")
-            time.sleep(app_config["sleep_time"])
-            current_retry_count += 1
-        if current_retry_count == max_retries:
-            logger.error("Failed to connect to kafka")
+max_retries = int(app_config["max_retries"])
+current_retry_count = 0
+while current_retry_count < max_retries:
+    try:
+        logger.info(
+            f"Attempting connection to Kafka (attempt {current_retry_count} of {max_retries})"
+        )
+        client = KafkaClient(
+            hosts=f'{events_config.get("hostname")}:{events_config.get("port")}'
+        )
+        topic = client.topics[str.encode(events_config["topic"])]
+        global producer
+        producer = topic.get_sync_producer()
+        logger.info(f"Successfully connected to kafka")
+        break
+    except Exception as e:
+        logger.error(f"attempt {current_retry_count} failed to connect to kafka")
+        time.sleep(app_config["sleep_time"])
+        current_retry_count += 1
+    if current_retry_count == max_retries:
+        logger.error("Failed to connect to kafka")
 
 
 def report_asteroid_direction(body):
@@ -60,7 +57,7 @@ def report_asteroid_direction(body):
         "payload": body,
     }
     msg_str = json.dumps(msg)
-    global producer
+
     producer.produce(msg_str.encode("utf-8"))
 
     logger.info(f"event {event_name} response (id: {trace_id}) with status {201}")
@@ -79,7 +76,7 @@ def report_asteroid_scale(body):
         "payload": body,
     }
     msg_str = json.dumps(msg)
-    global producer
+
     producer.produce(msg_str.encode("utf-8"))
 
     logger.info(f"event {event_name} response (id: {trace_id}) with status {201}")
@@ -91,5 +88,4 @@ app = connexion.FlaskApp(__name__, specification_dir="")
 app.add_api("openapi.yml", strict_validation=True, validate_responses=True)
 
 if __name__ == "__main__":
-    kafka_connect()
     app.run(port=8080)
