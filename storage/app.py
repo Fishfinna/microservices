@@ -196,7 +196,7 @@ def process_messages():
 
 
 def health():
-    return 200
+    return NoContent, 200
 
 
 app = connexion.FlaskApp(__name__, specification_dir="")
