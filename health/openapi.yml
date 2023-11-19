@@ -19,8 +19,8 @@ paths:
                 type: object
                 items:
                   $ref: "#/components/schemas/Health"
-        "400":
-          description: Invalid request
+        "404":
+          description: Not Found
           content:
             application/json:
               schema:

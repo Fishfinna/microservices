@@ -1,5 +1,4 @@
 import connexion
-from connexion import NoContent
 from datetime import datetime
 import requests
 import yaml
@@ -8,7 +7,19 @@ import logging.config
 from apscheduler.schedulers.background import BackgroundScheduler
 import json
 import os
-from flask_cors import CORS
+import create_tables
+from health import Health
+from sqlalchemy import create_engine, desc
+from base import Base
+from sqlalchemy.orm import sessionmaker
+
+create_tables.setup()
+DB_ENGINE = create_engine("sqlite:///health.sqlite")
+Base.metadata.bind = DB_ENGINE
+DB_SESSION = sessionmaker(bind=DB_ENGINE)
+
+SERVICE_LIST = ["receiver", "storage", "processing", "audit"]
+
 
 if "TARGET_ENV" in os.environ and os.environ["TARGET_ENV"] == "test":
     print("In Test Environment")
@@ -33,12 +44,24 @@ logger.info("Log Conf File: %s" % log_conf_file)
 
 
 def health():
-    return {}, 200
+    logger.info("Health status requested")
+    session = DB_SESSION()
+    latest_reading = session.query(Health).order_by(desc(Health.date_created)).first()
+    session.close()
+    if latest_reading is None:
+        return {"error": "No health readings available"}, 404
+
+    # extract the desired data
+    results = {}
+    for service in SERVICE_LIST:
+        results[service] = latest_reading.to_dict()[service]
+    results["last_update"] = latest_reading.to_dict()["last_update"]
+    print(results)
+    return results, 200
 
 
 def request_application_health(application_name):
     status = "Down"
-
     try:
         response = requests.get(
             f"http://localhost{app_config['requests'][application_name]}",
@@ -48,16 +71,25 @@ def request_application_health(application_name):
             status = "Running"
     except:
         pass
-
     return status
 
 
 def retrieve_health():
     logger.info("Starting periodic health checks...")
-    current_time = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-    logger.info(f"time {current_time}")
-    receiver = request_application_health("receiver")
-    logger.info(receiver)
+
+    results = {}
+    for service in SERVICE_LIST:
+        status = request_application_health(service)
+        logger.info(f"{service} is found to be {status}")
+        results[service] = status
+    results["last_update"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+
+    health_results = Health(**results)
+    session = DB_SESSION()
+    session.add(health_results)
+    session.commit()
+    session.close()
+    logger.info("Results stored to database")
 
 
 def init_scheduler():
@@ -70,8 +102,6 @@ def init_scheduler():
 
 app = connexion.FlaskApp(__name__, specification_dir="")
 app.add_api("openapi.yml", strict_validation=True, validate_responses=True)
-CORS(app.app)
-app.app.config["CORS_HEADERS"] = "Content-Type"
 
 
 if __name__ == "__main__":

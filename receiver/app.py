@@ -46,7 +46,6 @@ while current_retry_count < max_retries:
             hosts=f'{events_config.get("hostname")}:{events_config.get("port")}'
         )
         topic = client.topics[str.encode(events_config["topic"])]
-        global producer
         producer = topic.get_sync_producer()
         logger.info(f"Successfully connected to kafka")
         break

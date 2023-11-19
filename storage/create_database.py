@@ -15,7 +15,7 @@ connection = mysql.connector.connect(
 c = connection.cursor()
 c.execute(
     """
-          CREATE TABLE direction
+          CREATE TABLE IF NOT EXISTS direction
           (
             id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
             trace_id VARCHAR(250) NOT NULL, 
@@ -32,7 +32,7 @@ c.execute(
 
 c.execute(
     """
-        CREATE TABLE scale
+        CREATE TABLE IF NOT EXISTS scale
         (
             id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
             trace_id VARCHAR(250) NOT NULL, 

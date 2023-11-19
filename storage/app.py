@@ -16,6 +16,9 @@ import logging.config
 import time
 import os
 
+# this is intended to run on startup and not be referenced
+import create_database
+
 if "TARGET_ENV" in os.environ and os.environ["TARGET_ENV"] == "test":
     print("In Test Environment")
     app_conf_file = "/config/app_conf.yml"

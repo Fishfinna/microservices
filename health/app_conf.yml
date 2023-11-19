@@ -3,7 +3,7 @@ scheduler:
   period_sec: 20
 requests:
   timeout_sec: 5
-  receiver: :8100/health
+  receiver: :8080/health
   storage: :8090/health
   processing: :8100/health
   audit: :8110/health
