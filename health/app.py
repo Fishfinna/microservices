@@ -5,14 +5,13 @@ import yaml
 import logging
 import logging.config
 from apscheduler.schedulers.background import BackgroundScheduler
-import json
 import os
 import create_tables
 from health import Health
 from sqlalchemy import create_engine, desc
 from base import Base
 from sqlalchemy.orm import sessionmaker
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 
 create_tables.setup()
 DB_ENGINE = create_engine("sqlite:///health.sqlite")
@@ -64,7 +63,7 @@ def request_application_health(application_name):
     status = "Down"
     try:
         response = requests.get(
-            f"http://localhost{app_config['requests'][application_name]}",
+            f"http://{app_config['requests']['host']}{app_config['requests'][application_name]}",
             timeout=int(app_config["requests"]["timeout_sec"]),
         )
         if response.status_code == 200:
