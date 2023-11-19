@@ -12,12 +12,12 @@ from health import Health
 from sqlalchemy import create_engine, desc
 from base import Base
 from sqlalchemy.orm import sessionmaker
+from flask_cors import CORS, cross_origin
 
 create_tables.setup()
 DB_ENGINE = create_engine("sqlite:///health.sqlite")
 Base.metadata.bind = DB_ENGINE
 DB_SESSION = sessionmaker(bind=DB_ENGINE)
-
 SERVICE_LIST = ["receiver", "storage", "processing", "audit"]
 
 
@@ -102,6 +102,8 @@ def init_scheduler():
 
 app = connexion.FlaskApp(__name__, specification_dir="")
 app.add_api("openapi.yml", strict_validation=True, validate_responses=True)
+CORS(app.app)
+app.app.config["CORS_HEADERS"] = "Content-Type"
 
 
 if __name__ == "__main__":

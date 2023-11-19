@@ -4,3 +4,4 @@ APScheduler==3.10.4
 requests==2.27.1
 SQLAlchemy==1.4.36
 mysql-connector-python==8.0.33
+flask-cors==3.0.10

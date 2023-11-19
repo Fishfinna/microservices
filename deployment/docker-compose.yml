@@ -1,5 +1,14 @@
 version: '3.3'
 services:
+  health:
+    build:
+      context: ../health
+      dockerfile: Dockerfile
+    image: health
+    ports:
+      - "8120:8120"
+    environment:
+      - TARGET_ENV=test
   dashboard:
     build:
       context: ../dashboard-ui
