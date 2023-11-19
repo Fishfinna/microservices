@@ -30,6 +30,17 @@ paths:
                 properties:
                   message:
                     type: string
+  /health:
+    get:
+      tags:
+        - sensors
+      summary: gets the status for the application
+      operationId: app.health
+      responses:
+        "200":
+          description: Processing application running
+        "400":
+          description: The Processing application is not running
 components:
   schemas:
     ReadingStats:

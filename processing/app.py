@@ -136,11 +136,14 @@ def populate_stats():
 
 def init_scheduler():
     sched = BackgroundScheduler(daemon=True)
-    logger.debug("seconds", app_config["scheduler"]["period_sec"])
     sched.add_job(
         populate_stats, "interval", seconds=app_config["scheduler"]["period_sec"]
     )
     sched.start()
+
+
+def health():
+    return NoContent, 200
 
 
 app = connexion.FlaskApp(__name__, specification_dir="")
@@ -151,4 +154,4 @@ app.app.config["CORS_HEADERS"] = "Content-Type"
 
 if __name__ == "__main__":
     init_scheduler()
-    app.run(port=8100)
+    app.run(port=8100, use_reloader=False)

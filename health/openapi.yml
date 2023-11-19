@@ -1,0 +1,48 @@
+---
+openapi: 3.0.0
+info:
+  title: Asteroid API
+  description: Provides event stats for
+  version: "1.0.0"
+  contact:
+    email: shanti.steingagnon@gmail.com
+paths:
+  /health:
+    get:
+      operationId: app.health
+      responses:
+        "200":
+          description: OK - asteroid data returned
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: "#/components/schemas/Health"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+components:
+  schemas:
+    Health:
+      required:
+        - receiver
+        - storage
+        - processing
+        - audit
+      properties:
+        receiver:
+          type: string
+          example: Down
+        storage:
+          type: string
+          example: Down
+        processing:
+          type: string
+          example: Down

@@ -50,6 +50,17 @@ paths:
                 properties:
                   message:
                     type: string
+  /health:
+    get:
+      tags:
+        - sensors
+      summary: gets the status for the application
+      operationId: app.health
+      responses:
+        "200":
+          description: Storage application running
+        "400":
+          description: The Storage application is not running
   /scale:
     get:
       summary: return scale data

@@ -6,6 +6,7 @@ import logging
 import logging.config
 from flask_cors import CORS, cross_origin
 import os
+from connexion import NoContent
 
 
 if "TARGET_ENV" in os.environ and os.environ["TARGET_ENV"] == "test":
@@ -89,6 +90,10 @@ def get_scale(index):
 
     logger.error("could not find direction at index %d" % index)
     return {"message": f"Event at index {index} Not Found"}, 404
+
+
+def health():
+    return NoContent, 200
 
 
 app = connexion.FlaskApp(__name__, specification_dir="")

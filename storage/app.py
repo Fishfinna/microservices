@@ -14,7 +14,6 @@ import json
 import logging
 import logging.config
 import time
-from pykafka.exceptions import SocketDisconnectedError, LeaderNotAvailable
 import os
 
 if "TARGET_ENV" in os.environ and os.environ["TARGET_ENV"] == "test":
@@ -194,6 +193,10 @@ def process_messages():
                 session.close()
         traced.append(payload["trace_id"])
         consumer.commit_offsets()
+
+
+def health():
+    return 200
 
 
 app = connexion.FlaskApp(__name__, specification_dir="")
