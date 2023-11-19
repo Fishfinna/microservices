@@ -9,6 +9,9 @@ services:
       - "8120:8120"
     environment:
       - TARGET_ENV=test
+    volumes:
+      - /home/azureuser/config/health:/config
+      - /home/azureuser/logs:/logs
   dashboard:
     build:
       context: ../dashboard-ui
