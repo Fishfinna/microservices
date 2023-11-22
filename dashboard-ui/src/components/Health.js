@@ -90,8 +90,8 @@ export default function Health() {
             <tr>
               <td>Last Updated:</td>
               <td style={{ fontWeight: "bold" }}>
-                {(Math.floor(new Date().getTime() -
-                  new Date(stats["last_update"]).getTime())) / 1000}{" "}
+                {Math.floor((new Date() -
+                  new Date(stats["last_update"])) / 1000)}{" "}
                 seconds ago
               </td>
             </tr>
