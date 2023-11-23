@@ -7,7 +7,7 @@ export default function Health() {
   const [error, setError] = useState(null);
 
   const getStats = () => {
-    fetch(`http://20.151.78.202/health/health`)
+    fetch(`http://kafka-lab6.canadacentral.cloudapp.azure.com/health/health`)
       .then((res) => res.json())
       .then(
         (result) => {
