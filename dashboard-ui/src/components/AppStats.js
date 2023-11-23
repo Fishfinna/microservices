@@ -7,7 +7,7 @@ export default function AppStats() {
   const [error, setError] = useState(null);
 
   const getStats = () => {
-    fetch(`http://20.151.78.202:8100/stats`)
+    fetch(`http://20.151.78.202/processing/stats`)
       .then((res) => res.json())
       .then(
         (result) => {

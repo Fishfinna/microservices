@@ -8,10 +8,9 @@ import logging.config
 from apscheduler.schedulers.background import BackgroundScheduler
 import json
 import os
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 
-ENDPOINT = "http://localhost:8090"
-
+ENDPOINT = "http://kafka-lab6.canadacentral.cloudapp.azure.com/storage"
 
 if "TARGET_ENV" in os.environ and os.environ["TARGET_ENV"] == "test":
     print("In Test Environment")

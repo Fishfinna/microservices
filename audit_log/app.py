@@ -99,7 +99,7 @@ def health():
 app = connexion.FlaskApp(__name__, specification_dir="")
 app.add_api(
     "openapi.yml",
-    base_path="/audit_log",
+    base_path="/audit",
     strict_validation=True,
     validate_responses=True,
 )
