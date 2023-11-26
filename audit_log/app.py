@@ -9,22 +9,33 @@ import os
 from connexion import NoContent
 
 
-if "TARGET_ENV" in os.environ and os.environ["TARGET_ENV"] == "test":
-    print("In Test Environment")
-    app_conf_file = "/config/app_conf.yml"
-    log_conf_file = "/config/log_conf.yml"
-else:
-    print("In Dev Environment")
-    app_conf_file = "app_conf.yml"
-    log_conf_file = "log_conf.yml"
+def load_configuration_files():
+    """
+    Load configuration files based on the environment.
+
+    Returns:
+        Tuple: A tuple containing app_config and events_config dictionaries.
+    """
+    if "TARGET_ENV" in os.environ and os.environ["TARGET_ENV"] == "test":
+        print("In Test Environment")
+        app_conf_file = "/config/app_conf.yml"
+        log_conf_file = "/config/log_conf.yml"
+    else:
+        print("In Dev Environment")
+        app_conf_file = "app_conf.yml"
+        log_conf_file = "log_conf.yml"
+
+    with open(app_conf_file, "r") as f:
+        app_config = yaml.safe_load(f)
+        events_config = app_config.get("events")
+
+    return app_config, events_config
 
 
-with open(app_conf_file, "r") as f:
-    app_config = yaml.safe_load(f.read())
-    events_config = app_config.get("events")
+app_config, events_config = load_configuration_files()
 
 with open(log_conf_file, "r") as f:
-    log_config = yaml.safe_load(f.read())
+    log_config = yaml.safe_load(f)
     logging.config.dictConfig(log_config)
     logger = logging.getLogger("basicLogger")
 
@@ -32,67 +43,76 @@ logger.info("App Conf File: %s" % app_conf_file)
 logger.info("Log Conf File: %s" % log_conf_file)
 
 
-def get_direction(index):
-    hostname = "%s:%d" % (
-        app_config["events"]["hostname"],
-        app_config["events"]["port"],
-    )
+def get_event_at_index(index, event_type):
+    """
+    Retrieve an event of the specified type at a given index from Kafka.
+
+    Args:
+        index (int): The index of the event.
+        event_type (str): The type of the event ("di" for direction, "sc" for scale).
+
+    Returns:
+        Tuple: A tuple containing the event and HTTP status code.
+    """
+    hostname = f"{app_config['events']['hostname']}:{app_config['events']['port']}"
     client = KafkaClient(hosts=hostname)
     topic = client.topics[str.encode(app_config["events"]["topic"])]
     consumer = topic.get_simple_consumer(
         reset_offset_on_start=True, consumer_timeout_ms=1000
     )
-    logger.info("Retrieving Direction at index %d" % index)
+    logger.info(f"Retrieving {event_type} at index {index}")
 
     try:
-        direction_messages = []
+        event_messages = []
         for msg in consumer:
             msg_str = msg.value.decode("utf-8")
             msg = json.loads(msg_str)
             payload = msg["payload"]
-            if msg["type"] == "di":
-                direction_messages.append(payload)
-        if direction_messages[index]:
-            logger.info(f"located event {direction_messages[index]} at index {index}")
-            return direction_messages[index], 200
+            if msg["type"] == event_type:
+                event_messages.append(payload)
+        if event_messages[index]:
+            logger.info(f"Located event {event_messages[index]} at index {index}")
+            return event_messages[index], 200
     except Exception as e:
-        logger.error("No messages found at requested index! error:", type(e))
+        logger.error(f"No messages found at requested index! Error: {type(e)}")
 
-    logger.error("could not find direction at index %d" % index)
+    logger.error(f"Could not find {event_type} at index {index}")
     return {"message": f"Event at index {index} Not Found"}, 404
+
+
+def get_direction(index):
+    """
+    Retrieve a direction event at a given index from Kafka.
+
+    Args:
+        index (int): The index of the event.
+
+    Returns:
+        Tuple: A tuple containing the direction event and HTTP status code.
+    """
+    return get_event_at_index(index, "di")
 
 
 def get_scale(index):
-    hostname = "%s:%d" % (
-        app_config["events"]["hostname"],
-        app_config["events"]["port"],
-    )
-    client = KafkaClient(hosts=hostname)
-    topic = client.topics[str.encode(app_config["events"]["topic"])]
-    consumer = topic.get_simple_consumer(
-        reset_offset_on_start=True, consumer_timeout_ms=1000
-    )
-    logger.info("Retrieving scale at index %d" % index)
+    """
+    Retrieve a scale event at a given index from Kafka.
 
-    try:
-        scale_messages = []
-        for msg in consumer:
-            msg_str = msg.value.decode("utf-8")
-            msg = json.loads(msg_str)
-            payload = msg["payload"]
-            if msg["type"] == "sc":
-                scale_messages.append(payload)
-        if scale_messages[index]:
-            logger.info(f"located event {scale_messages[index]} at index {index}")
-            return scale_messages[index], 200
-    except Exception as e:
-        logger.error("No messages found at requested index! error:", type(e))
+    Args:
+        index (int): The index of the event.
 
-    logger.error("could not find direction at index %d" % index)
-    return {"message": f"Event at index {index} Not Found"}, 404
+    Returns:
+        Tuple: A tuple containing the scale event and HTTP status code.
+    """
+    return get_event_at_index(index, "sc")
 
 
 def health():
+    """
+    Endpoint for checking the health of the application.
+
+    Returns:
+        Tuple: A tuple indicating a successful health check with HTTP status code.
+    """
     return NoContent, 200
 
 
