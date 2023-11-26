@@ -1,4 +1,4 @@
-def call(dockerRepoName, imageName) {
+def call(imageName) {
     pipeline {
         agent any
         parameters {
@@ -18,9 +18,9 @@ def call(dockerRepoName, imageName) {
             }
             stage('Package') {
                 steps {
-                    withCredentials([string(credentialsId: 'DockerHub', variable: 'TOKEN')]) {
+                    withCredentials([string(credentialsId: 'ShantiDockerHub', variable: 'TOKEN')]) {
                         sh "docker login -u 'fishfinna' -p '$TOKEN' docker.io"
-                        sh "docker build -t ${dockerRepoName}:latest --tag fishfinna/${dockerRepoName}:${imageName} ."
+                        sh "docker build -t ${imageName}:latest --tag fishfinna/${imageName}:${imageName} ."
                         sh "docker push fishfinna/${dockerRepoName}:${imageName}"
                     } 
                 }
