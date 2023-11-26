@@ -7,7 +7,7 @@ def call(imageName) {
         stages {
             stage('Lint') {
                 steps {
-                    sh "pylint --fail-under=5.0 *.py"
+                    sh "pylint --fail-under=5.0 $(imageName)/*.py"
                 }
             }
             stage('Security Check') {
