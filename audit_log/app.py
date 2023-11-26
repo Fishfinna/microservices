@@ -1,9 +1,9 @@
 import os
+import logging
+import logging.config
 import yaml
 import json
 from pykafka import KafkaClient
-import logging
-import logging.config
 from flask_cors import CORS
 from connexion import NoContent
 import connexion
