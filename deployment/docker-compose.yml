@@ -41,10 +41,7 @@ services:
     networks:
       - "api.network"
   receiver:
-    build:
-      context: ../receiver
-      dockerfile: Dockerfile
-    image: receiver
+    image: fishfinna/receiver:latest
     ports:
       - "8080"
     depends_on:
@@ -57,10 +54,7 @@ services:
     networks:
       - "api.network"
   storage:
-    build:
-      context: ../storage
-      dockerfile: Dockerfile
-    image: storage
+    image: fishfinna/storage:latest
     ports:
       - "8090"
     depends_on:
@@ -74,10 +68,7 @@ services:
     networks:
       - "api.network"
   processing:
-    build:
-      context: ../processing
-      dockerfile: Dockerfile
-    image: processing
+    image: fishfinna/processing:latest
     ports:
       - "8100"
     environment:
@@ -89,10 +80,7 @@ services:
     networks:
       - "api.network"
   audit_log:
-    build:
-      context: ../audit_log
-      dockerfile: Dockerfile
-    image: audit_log
+    image: fishfinna/audit_log:latest
     depends_on:
       - "kafka"
     ports:
