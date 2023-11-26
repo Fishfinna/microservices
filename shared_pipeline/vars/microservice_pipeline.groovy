@@ -14,7 +14,7 @@ def call(imageName) {
             stage('Security Check') {
                 steps {
                     sh 'pip install safety --break-system-packages'
-                    sh 'safety check -r requirements.txt --full-report'
+                    sh 'pipenv run safety check -r requirements.txt --full-report'
                 }
             }
             stage('Package') {
