@@ -31,7 +31,7 @@ def call(imageName) {
                 }
                 steps {
                     sshagent(credentials: ['shanti-kafka-ssh']) {
-                        sh "ssh azureuser@20.151.78.202 'cd ~/microservices/deployment && docker pull fishfinna/${imageName}:latest && docker-compose up -d'"
+                        sh "ssh -o StrictHostKeyChecking=no azureuser@20.151.78.202 'cd ~/microservices/deployment && docker pull fishfinna/${imageName}:latest && docker-compose up -d'"
                     }
                 }
             }
