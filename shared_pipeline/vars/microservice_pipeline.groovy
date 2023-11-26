@@ -13,8 +13,7 @@ def call(imageName) {
             }
             stage('Security Check') {
                 steps {
-                    sh 'pip install safety --break-system-packages'
-                    sh '/home/azureuser/.local/bin/safety check -r requirements.txt --full-report'
+                    sh 'safety check -r requirements.txt --full-report'
                 }
             }
             stage('Package') {
