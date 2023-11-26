@@ -20,8 +20,8 @@ def call(imageName) {
                 steps {
                     withCredentials([string(credentialsId: 'ShantiDockerHub', variable: 'TOKEN')]) {
                         sh "docker login -u 'fishfinna' -p '$TOKEN' docker.io"
-                        sh "docker build -t ${imageName}:latest --tag fishfinna/${imageName}:${imageName} ."
-                        sh "docker push fishfinna/${dockerRepoName}:${imageName}"
+                        sh "docker build -t fishfinna/${imageName}:latest  ${imageName}/."
+                        sh "docker push fishfinna/${imageName}:latest"
                     } 
                 }
             }
