@@ -15,8 +15,8 @@ LOG_CONF_FILE = (
     "/config/log_conf.yml" if os.environ.get("TARGET_ENV") == "test" else "log_conf.yml"
 )
 
-with open(APP_CONF_FILE, "r", encoding="utf-8") as test:
-    app_config = yaml.safe_load(test.read())
+with open(APP_CONF_FILE, "r", encoding="utf-8") as file:
+    app_config = yaml.safe_load(file.read())
     events_config = app_config.get("events")
 
 with open(LOG_CONF_FILE, "r", encoding="utf-8") as f:
@@ -26,6 +26,7 @@ with open(LOG_CONF_FILE, "r", encoding="utf-8") as f:
 
 logger.info("App Conf File: %s", APP_CONF_FILE)
 logger.info("Log Conf File: %s", LOG_CONF_FILE)
+logger.info("Pipeline test working")
 
 
 def get_direction(index):
