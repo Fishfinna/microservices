@@ -7,7 +7,6 @@ def call(imageName) {
         stages {
             stage('Lint') {
                 steps {
-                    sh "pip install -r ${imageName}/requirements.txt --break-system-packages"
                     sh "pylint --fail-under=5.0 ${imageName}/*.py"
                 }
             }
