@@ -33,6 +33,7 @@ with open(log_conf_file, "r") as f:
 
 logger.info("App Conf File: %s" % app_conf_file)
 logger.info("Log Conf File: %s" % log_conf_file)
+logger.info("Pipeline working")
 
 
 def get_stats():
