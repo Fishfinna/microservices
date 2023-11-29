@@ -33,7 +33,6 @@ with open(log_conf_file, "r") as f:
 
 logger.info("App Conf File: %s" % app_conf_file)
 logger.info("Log Conf File: %s" % log_conf_file)
-logger.info("Pipeline working")
 
 
 def get_stats():
@@ -55,6 +54,7 @@ def get_stats():
 
 def populate_stats():
     """Periodically update stats"""
+    logger.info("Pipeline working")
     if os.path.isfile(data_file):
         with open(data_file, "r") as f:
             json_data = json.load(f)
