@@ -1,8 +1,8 @@
 version: 1
 eventstore1:
-  url: http://kafka-lab6.canadacentral.cloudapp.azure.com/storage/direction
+  url: http://kafka-lab6.canadacentral.cloudapp.azure.com/processing/direction
 eventstore2:
-  url: http://kafka-lab6.canadacentral.cloudapp.azure.com/storage/scale
+  url: http://kafka-lab6.canadacentral.cloudapp.azure.com/processing/scale
 events:
   hostname: kafka-lab6.canadacentral.cloudapp.azure.com
   port: 9092
