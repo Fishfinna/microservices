@@ -1,0 +1,8 @@
+2023-11-30 10:53:07,816 - basicLogger - INFO - App Conf File: app_conf.yml
+2023-11-30 10:53:07,823 - basicLogger - INFO - Log Conf File: log_conf.yml
+2023-11-30 10:53:08,091 - basicLogger - INFO - connected to DB. Hostname:kafka-lab6.canadacentral.cloudapp.azure.com Port:3306
+2023-11-30 10:53:08,432 - basicLogger - INFO - App Conf File: app_conf.yml
+2023-11-30 10:53:08,442 - basicLogger - INFO - Log Conf File: log_conf.yml
+2023-11-30 10:53:08,451 - basicLogger - INFO - connected to DB. Hostname:kafka-lab6.canadacentral.cloudapp.azure.com Port:3306
+2023-11-30 10:53:08,699 - basicLogger - INFO - Attempting connection to Kafka (attempt 0 of 10)
+2023-11-30 10:53:09,107 - basicLogger - INFO - Successfully connected to kafka
